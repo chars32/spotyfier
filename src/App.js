@@ -1,19 +1,53 @@
 import app from "./utils/Firebase";
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
+import { useState } from "react";
 
+import Auth from "./pages/Auth/Auth";
+
+const auth = getAuth(app)
 
 function App() {
 
-  const auth = getAuth(app)
+  const [user, setUser] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+
   onAuthStateChanged(auth, currentUser => {
-    currentUser ? console.log("si") : console.log("no")
+    if (!currentUser) {
+      setUser(null)
+    } else {
+      setUser(currentUser)
+    }
+    setIsLoading(false)
+
   })
 
+  if (isLoading) {
+    return null
+  }
+
   return (
-    <div className="App">
-      <h1>App Electron + React !!! </h1>
-    </div>
+    !user ? <Auth /> : <UserLogged />
   );
+}
+
+const UserLogged = () => {
+
+  const logout = () => {
+    signOut(auth)
+  }
+
+  return (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'column',
+      height: '100vh'
+    }}>
+      <h1>Usuario Logeado</h1>
+      <button onClick={logout}>Cerrar Sesión</button>
+    </div>
+  )
 }
 
 export default App;
