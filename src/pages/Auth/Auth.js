@@ -8,7 +8,7 @@ import LogoNameWhite from '../../assets/png/logo-name-white.png'
 import './Auth.scss'
 
 export default function Auth() {
-  const [selectedForm, setSelectForm] = useState(null)
+  const [selectedForm, setSelectedForm] = useState(null)
 
   const handlerForm = () => {
     switch (selectedForm) {
@@ -17,7 +17,7 @@ export default function Auth() {
       case "register":
         return <RegisterForm />
       default:
-        return <AuthOptions />
+        return <AuthOptions setSelectedForm={setSelectedForm} />
     }
   }
 
