@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 
 import { Button, Icon, Form, Input } from 'semantic-ui-react'
 import { validateEmail } from '../../../utils/Validations'
-// import app from '../../../utils/Firebase'
-// import { getAuth } from 'firebase/auth'
+import app from '../../../utils/Firebase'
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 
 import './RegisterForm.scss'
+
+const auth = getAuth(app)
 
 export default function RegisterForm({ setSelectedForm }) {
 
@@ -48,7 +50,16 @@ export default function RegisterForm({ setSelectedForm }) {
     setFormError(errors)
 
     if (formOk) {
-      console.log('form valido')
+      setIsLoading(true)
+      createUserWithEmailAndPassword(auth, formData.email, formData.password)
+        .then(() => {
+          console.log('Registro completado')
+        }).catch(() => {
+          console.log("Error al crear la cuenta")
+        }).finally(() => {
+          setIsLoading(false)
+          setSelectedForm(null)
+        })
     }
   }
 
@@ -88,7 +99,7 @@ export default function RegisterForm({ setSelectedForm }) {
           />
           {formError.username && (<span className='error-text'>Por favor introduce un username </span>)}
         </Form.Field>
-        <Button type='submit'>
+        <Button type='submit' loading={isLoading}>
           Continuar
         </Button>
       </Form>
