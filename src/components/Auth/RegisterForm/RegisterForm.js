@@ -1,7 +1,7 @@
-import _ from 'lodash'
 import React, { useState } from 'react'
 
 import { Button, Icon, Form, Input } from 'semantic-ui-react'
+import { validateEmail } from '../../../utils/Validations'
 // import app from '../../../utils/Firebase'
 // import { getAuth } from 'firebase/auth'
 
@@ -11,6 +11,8 @@ export default function RegisterForm({ setSelectedForm }) {
 
   const [formData, setFormData] = useState(defaultValueForm())
   const [showPassword, setShowPassword] = useState(false)
+  const [formError, setFormError] = useState({})
+  const [isLoading, setIsLoading] = useState(false)
 
   const handlerShowPassword = () => {
     setShowPassword(!showPassword)
@@ -24,8 +26,30 @@ export default function RegisterForm({ setSelectedForm }) {
   }
 
   const onSubmit = () => {
-    console.log('Formulario enviado')
-    console.log(formData)
+    setFormError({})
+    let errors = {}
+    let formOk = true
+
+    if (!validateEmail(formData.email)) {
+      errors.email = true
+      formOk = false
+    }
+
+    if (formData.password.length < 6) {
+      errors.password = true
+      formOk = false
+    }
+
+    if (!formData.username) {
+      errors.username = true
+      formOk = false
+    }
+
+    setFormError(errors)
+
+    if (formOk) {
+      console.log('form valido')
+    }
   }
 
   return (
@@ -38,9 +62,9 @@ export default function RegisterForm({ setSelectedForm }) {
             name='email'
             placeholder='Correo electronico'
             icon='mail outline'
-
-          // error={}
+            error={formError.email}
           />
+          {formError.email && (<span className='error-text'>Por favor introduce email valido</span>)}
         </Form.Field>
         <Form.Field>
           <Input
@@ -50,9 +74,9 @@ export default function RegisterForm({ setSelectedForm }) {
             icon={
               showPassword ? (<Icon name='eye slash outline' link onClick={handlerShowPassword} />) : (<Icon name='eye' link onClick={handlerShowPassword} />)
             }
-
-          // error={}
+            error={formError.password}
           />
+          {formError.password && (<span className='error-text'>Por favor elige contraseña mayor 6 caracteres</span>)}
         </Form.Field>
         <Form.Field>
           <Input
@@ -60,9 +84,9 @@ export default function RegisterForm({ setSelectedForm }) {
             name='username'
             placeholder='Como deberiamos llamarte'
             icon='user circle outline'
-
-          // error={}
+            error={formError.username}
           />
+          {formError.username && (<span className='error-text'>Por favor introduce un username </span>)}
         </Form.Field>
         <Button type='submit'>
           Continuar
