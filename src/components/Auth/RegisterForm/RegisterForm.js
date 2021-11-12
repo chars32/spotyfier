@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React, { useState } from 'react'
 
 import { Button, Icon, Form, Input } from 'semantic-ui-react'
@@ -9,6 +10,11 @@ import './RegisterForm.scss'
 export default function RegisterForm({ setSelectedForm }) {
 
   const [formData, setFormData] = useState(defaultValueForm())
+  const [showPassword, setShowPassword] = useState(false)
+
+  const handlerShowPassword = () => {
+    setShowPassword(!showPassword)
+  }
 
   const onChange = e => {
     setFormData({
@@ -38,10 +44,12 @@ export default function RegisterForm({ setSelectedForm }) {
         </Form.Field>
         <Form.Field>
           <Input
-            type='password'
+            type={showPassword ? 'text' : 'password'}
             name='password'
             placeholder='Contraseña'
-            icon='eye'
+            icon={
+              showPassword ? (<Icon name='eye slash outline' link onClick={handlerShowPassword} />) : (<Icon name='eye' link onClick={handlerShowPassword} />)
+            }
 
           // error={}
           />
