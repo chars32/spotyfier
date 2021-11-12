@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { Button, Icon, Form, Input } from 'semantic-ui-react'
 // import app from '../../../utils/Firebase'
@@ -8,21 +8,31 @@ import './RegisterForm.scss'
 
 export default function RegisterForm({ setSelectedForm }) {
 
+  const [formData, setFormData] = useState(defaultValueForm())
+
+  const onChange = e => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+  }
+
   const onSubmit = () => {
     console.log('Formulario enviado')
+    console.log(formData)
   }
 
   return (
     <div className='register-form'>
       <h1>Empieza a escuchar con una cuenta de Spotyfier gratis</h1>
-      <Form onSubmit={onSubmit}>
+      <Form onSubmit={onSubmit} onChange={onChange}>
         <Form.Field>
           <Input
             type='text'
             name='email'
             placeholder='Correo electronico'
             icon='mail outline'
-          // onChange={}
+
           // error={}
           />
         </Form.Field>
@@ -32,7 +42,7 @@ export default function RegisterForm({ setSelectedForm }) {
             name='password'
             placeholder='Contraseña'
             icon='eye'
-          // onChange={}
+
           // error={}
           />
         </Form.Field>
@@ -42,7 +52,7 @@ export default function RegisterForm({ setSelectedForm }) {
             name='username'
             placeholder='Como deberiamos llamarte'
             icon='user circle outline'
-          // onChange={}
+
           // error={}
           />
         </Form.Field>
@@ -60,4 +70,12 @@ export default function RegisterForm({ setSelectedForm }) {
       </div>
     </div>
   )
+}
+
+function defaultValueForm() {
+  return {
+    email: '',
+    password: '',
+    username: ''
+  }
 }
