@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 import { Button, Icon, Form, Input } from 'semantic-ui-react'
+import { toast } from 'react-toastify'
 import { validateEmail } from '../../../utils/Validations'
 import app from '../../../utils/Firebase'
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
@@ -55,7 +56,7 @@ export default function RegisterForm({ setSelectedForm }) {
         .then(() => {
           console.log('Registro completado')
         }).catch(() => {
-          console.log("Error al crear la cuenta")
+          toast.error("Error al crear la cuenta")
         }).finally(() => {
           setIsLoading(false)
           setSelectedForm(null)

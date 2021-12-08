@@ -1,6 +1,7 @@
 import app from "./utils/Firebase";
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
 import { useState } from "react";
+import { ToastContainer } from 'react-toastify'
 
 import Auth from "./pages/Auth/Auth";
 
@@ -25,9 +26,26 @@ function App() {
     return null
   }
 
+  // return (
+  //   !user ? <Auth /> : <UserLogged />
+  // );
+
   return (
-    !user ? <Auth /> : <UserLogged />
-  );
+    <>
+      {!user ? <Auth /> : <UserLogged />}
+      < ToastContainer
+        position='bottom-right'
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnVisibilityChange
+        draggable
+        pauseOnHover={false}
+      />
+    </>
+  )
 }
 
 const UserLogged = () => {
