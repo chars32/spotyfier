@@ -30,6 +30,8 @@ function App() {
   //   !user ? <Auth /> : <UserLogged />
   // );
 
+  console.log(user)
+
   return (
     <>
       {!user ? <Auth /> : <UserLogged />}

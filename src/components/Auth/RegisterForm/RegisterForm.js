@@ -4,7 +4,7 @@ import { Button, Icon, Form, Input } from 'semantic-ui-react'
 import { toast } from 'react-toastify'
 import { validateEmail } from '../../../utils/Validations'
 import app from '../../../utils/Firebase'
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 
 import './RegisterForm.scss'
 
@@ -55,6 +55,7 @@ export default function RegisterForm({ setSelectedForm }) {
       createUserWithEmailAndPassword(auth, formData.email, formData.password)
         .then(() => {
           console.log('Registro completado')
+          changeUserName()
         }).catch(() => {
           toast.error("Error al crear la cuenta")
         }).finally(() => {
@@ -63,6 +64,15 @@ export default function RegisterForm({ setSelectedForm }) {
         })
     }
   }
+
+  const changeUserName = () => {
+    updateProfile(getAuth().currentUser, {
+      displayName: formData.username
+    }).catch(() => {
+      toast.error("Error al asignar el nombre de usuario.")
+    })
+  }
+
 
   return (
     <div className='register-form'>
